@@ -37,27 +37,106 @@ public class GamePanel extends JPanel implements Runnable{
         player2 = new Player(GAME_WIDTH - PLAYER_DIAMETER - 100, (GAME_HEIGHT/2)-(PLAYER_DIAMETER/2), PLAYER_DIAMETER, PLAYER_DIAMETER, 2);
     }
     public void newBall(){
-
+        random = new Random();
+        ball = new Ball((GAME_WIDTH/2) - (BALL_DIAMETER/2), random.nextInt(GAME_HEIGHT-BALL_DIAMETER), BALL_DIAMETER, BALL_DIAMETER);
     }
     public void newGoalPosts(){
-
+        goalpost1 = new GoalPost(0, (GAME_HEIGHT/2)-(GOALPOST_HEIGHT/2), GOALPOST_WIDTH, GOALPOST_HEIGHT, 1);
+        goalpost2 = new GoalPost(GAME_WIDTH - GOALPOST_WIDTH, (GAME_HEIGHT/2)-(GOALPOST_HEIGHT/2), GOALPOST_WIDTH, GOALPOST_HEIGHT, 2);
     }
     public void paintComponent(Graphics g){
-
+        image = createImage(getWidth(), getHeight());
+        graphics = image.getGraphics();
+        draw(graphics);
+        g.drawImage(image, 0, 0, this);
     }
     public void draw(Graphics g){
-
+        player1.draw(g);
+        player2.draw(g);
+        ball.draw(g);
+        score.draw(g);
+        goalpost1.draw(g);
+        goalpost2.draw(g);
     }
     public void move(){
-
+        player1.move();
+        player2.move();
+        ball.move();
     }
     public void checkCollision(){
-
+        if(ball.y <= 0){
+            ball.setYDirection(-ball.yVelocity);
+        }
+        if(ball.y >= GAME_HEIGHT - BALL_DIAMETER){
+            ball.setYDirection(-ball.yVelocity);
+        }
+        if(ball.intersects(player1)){
+            ball.xVelocity = Math.abs(ball.xVelocity);
+            ball.xVelocity++;
+            if(ball.yVelocity>0)
+                ball.yVelocity++;
+            else
+                ball.yVelocity--;
+            ball.setXDirection(ball.xVelocity);
+            ball.setYDirection(ball.yVelocity);
+        }
+        if(ball.intersects(player2)){
+            ball.xVelocity = Math.abs(ball.xVelocity);
+            ball.xVelocity++;
+            if(ball.yVelocity>0)
+                ball.yVelocity++;
+            else
+                ball.yVelocity--;
+            ball.setXDirection(-ball.xVelocity);
+            ball.setYDirection(ball.yVelocity);
+        }
+        if(ball.intersects(goalpost1)){
+            score.player2++;
+            newGoalPosts();
+            newBall();
+            System.out.println("Player 2: "+score.player2);
+        }
+        if(ball.intersects(goalpost2)){
+            score.player1++;
+            newGoalPosts();
+            newBall();
+            System.out.println("Player 1: "+score.player1);
+        }
+        if(player1.y<=0)
+            player1.y = 0;
+        if(player1.y >= (GAME_HEIGHT - PLAYER_DIAMETER))
+            player1.y = GAME_HEIGHT - PLAYER_DIAMETER;
+        if(player2.y<=0)
+            player2.y = 0;
+        if(player2.y >= (GAME_HEIGHT - PLAYER_DIAMETER))
+            player2.y = GAME_HEIGHT - PLAYER_DIAMETER;
     }
     public void run(){
-
+        // Game loop
+        long lastTime = System.nanoTime();
+        double amountOfTicks = 60.0;
+        double ns = 1000000000/amountOfTicks;
+        double delta = 0;
+        while(true){
+            long now = System.nanoTime();
+            delta += (now - lastTime)/ns;
+            lastTime = now;
+            if(delta >= 1){
+                move();
+                checkCollision();
+                repaint();
+                delta--;
+            }
+        }
     }
     public class AL extends KeyAdapter{
-
+        public void keyPressed(KeyEvent e){
+            player1.keyPressed(e);
+            player2.keyPressed(e);
+        }
+        public void keyReleased(KeyEvent e){
+            player1.keyReleased(e);
+            player2.keyReleased(e);
+        }
     }
 }

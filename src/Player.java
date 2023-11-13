@@ -52,6 +52,47 @@ public class Player extends Rectangle{
         }
     }
 
+    public void keyReleased(KeyEvent e){
+        switch(id){
+            case 1:
+                if(e.getKeyCode()==KeyEvent.VK_W){
+                    setYDirection(0);
+                    move();
+                }
+                if(e.getKeyCode()==KeyEvent.VK_S){
+                    setYDirection(0);
+                    move();
+                }
+                if(e.getKeyCode()==KeyEvent.VK_A){
+                    setXDirection(0);
+                    move();
+                }
+                if(e.getKeyCode()==KeyEvent.VK_D){
+                    setXDirection(0);
+                    move();
+                }
+                break;
+            case 2:
+                if(e.getKeyCode()==KeyEvent.VK_UP){
+                    setYDirection(0);
+                    move();
+                }
+                if(e.getKeyCode()==KeyEvent.VK_DOWN){
+                    setYDirection(0);
+                    move();
+                }
+                if(e.getKeyCode()==KeyEvent.VK_LEFT){
+                    setXDirection(0);
+                    move();
+                }
+                if(e.getKeyCode()==KeyEvent.VK_RIGHT){
+                    setXDirection(0);
+                    move();
+                }
+                break;
+        }
+    }
+
     public void setYDirection(int yDirection){
         yVelocity = yDirection;
     }
