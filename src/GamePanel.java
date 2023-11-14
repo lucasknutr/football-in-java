@@ -7,7 +7,7 @@ public class GamePanel extends JPanel implements Runnable{
     static final int GAME_HEIGHT = (int)(GAME_WIDTH * (0.5555));
     static final Dimension SCREEN_SIZE = new Dimension(GAME_WIDTH, GAME_HEIGHT);
     static final int BALL_DIAMETER = 25;
-    static final int PLAYER_DIAMETER = 20;
+    static final int PLAYER_DIAMETER = 50;
     static final int GOALPOST_WIDTH = 20;
     static final int GOALPOST_HEIGHT = 200;
     Thread gameThread;
@@ -70,6 +70,12 @@ public class GamePanel extends JPanel implements Runnable{
         if(ball.y >= GAME_HEIGHT - BALL_DIAMETER){
             ball.setYDirection(-ball.yVelocity);
         }
+        if(ball.x <= 0){
+            ball.setXDirection(-ball.xVelocity);
+        }
+        if(ball.x >= GAME_WIDTH - BALL_DIAMETER){
+            ball.setXDirection(-ball.xVelocity);
+        }
         if(ball.intersects(player1)){
             ball.xVelocity = Math.abs(ball.xVelocity);
             ball.xVelocity++;
@@ -77,8 +83,8 @@ public class GamePanel extends JPanel implements Runnable{
                 ball.yVelocity++;
             else
                 ball.yVelocity--;
-            ball.setXDirection(ball.xVelocity);
-            ball.setYDirection(ball.yVelocity);
+            ball.setXDirection(player1.getXVelocity());
+            ball.setYDirection(player1.getYVelocity());
         }
         if(ball.intersects(player2)){
             ball.xVelocity = Math.abs(ball.xVelocity);
@@ -87,8 +93,8 @@ public class GamePanel extends JPanel implements Runnable{
                 ball.yVelocity++;
             else
                 ball.yVelocity--;
-            ball.setXDirection(-ball.xVelocity);
-            ball.setYDirection(ball.yVelocity);
+            ball.setXDirection(player2.getXVelocity());
+            ball.setYDirection(player2.getYVelocity());
         }
         if(ball.intersects(goalpost1)){
             score.player2++;
@@ -110,6 +116,18 @@ public class GamePanel extends JPanel implements Runnable{
             player2.y = 0;
         if(player2.y >= (GAME_HEIGHT - PLAYER_DIAMETER))
             player2.y = GAME_HEIGHT - PLAYER_DIAMETER;
+        if(player1.x<=0)
+            player1.x = 0;
+        if(player1.x >= (GAME_WIDTH - PLAYER_DIAMETER))
+            player1.x = GAME_WIDTH - PLAYER_DIAMETER;
+        if(player2.x<=0)
+            player2.x = 0;
+        if(player2.x >= (GAME_WIDTH - PLAYER_DIAMETER))
+            player2.x = GAME_WIDTH - PLAYER_DIAMETER;
+        if(ball.x<=0)
+            ball.x = 0;
+        if(ball.x >= (GAME_WIDTH - BALL_DIAMETER))
+            ball.x = GAME_WIDTH - BALL_DIAMETER;
     }
     public void run(){
         // Game loop

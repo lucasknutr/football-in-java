@@ -99,6 +99,12 @@ public class Player extends Rectangle{
     public void setXDirection(int xDirection){
         xVelocity = xDirection;
     }
+    public int getYVelocity(){
+        return yVelocity;
+    }
+    public int getXVelocity(){
+        return xVelocity;
+    }
     public void move(){
         y += yVelocity;
         x += xVelocity;
@@ -108,6 +114,6 @@ public class Player extends Rectangle{
             g.setColor(Color.blue);
         else
             g.setColor(Color.red);
-        g.fillRect(x, y, width, height);
+        g.fillOval(x, y, width, height);
     }
 }
